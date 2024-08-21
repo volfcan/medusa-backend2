@@ -76,17 +76,18 @@ const modules = {
   },
 };
 
-// /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
-// const projectConfig = {
-//   jwt_secret: process.env.JWT_SECRET || "supersecret",
-//   cookie_secret: process.env.COOKIE_SECRET || "supersecret",
-//   store_cors: STORE_CORS,
-//   database_url: DATABASE_URL,
-//   worker_mode: process.env.MEDUSA_WORKER_MODE,
-//   admin_cors: ADMIN_CORS,
-//   // Uncomment the following lines to enable REDIS
-//   redis_url: REDIS_URL,
-// };
+/** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
+const projectConfig = {
+  jwt_secret: process.env.JWT_SECRET || "supersecret",
+  cookie_secret: process.env.COOKIE_SECRET || "supersecret",
+  store_cors: STORE_CORS,
+  database_url: DATABASE_URL,
+  worker_mode: process.env.MEDUSA_WORKER_MODE,
+  database_extra: { ssl: { rejectUnauthorized: false } },
+  admin_cors: ADMIN_CORS,
+  // Uncomment the following lines to enable REDIS
+  redis_url: REDIS_URL,
+};
 
 /** @type {import('@medusajs/medusa').ConfigModule} */
 module.exports = {
@@ -96,7 +97,6 @@ module.exports = {
     database_type: "postgres",
     store_cors: STORE_CORS,
     admin_cors: ADMIN_CORS,
-    database_extra: { ssl: { rejectUnauthorized: false } },
     redis_url: process.env.REDIS_URL,
   },
   plugins,
