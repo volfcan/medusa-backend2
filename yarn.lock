@@ -6273,6 +6273,13 @@ cross-env@^7.0.3:
   dependencies:
     cross-spawn "^7.0.1"
 
+cross-fetch@^3.1.6:
+  version "3.1.8"
+  resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.8.tgz"
+  integrity sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==
+  dependencies:
+    node-fetch "^2.6.12"
+
 cross-fetch@4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-4.0.0.tgz"
@@ -9494,6 +9501,17 @@ medusa-payment-stripe@^6.0.10:
     express "^4.17.1"
     stripe "^11.10.0"
 
+medusa-plugin-meilisearch@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.npmjs.org/medusa-plugin-meilisearch/-/medusa-plugin-meilisearch-2.0.11.tgz"
+  integrity sha512-QBbKnrsIff039z4QT+xi5miUUE4CaUJp87mMnbwEQ19hO7oQ2jUwvGUUNxj+VDsq+uOj7vTbyje8lHKavzvaYQ==
+  dependencies:
+    "@medusajs/modules-sdk" "^1.12.12"
+    "@medusajs/utils" "^1.11.10"
+    body-parser "^1.19.0"
+    lodash "^4.17.21"
+    meilisearch "^0.32.3"
+
 medusa-plugin-sendgrid@^1.3.13:
   version "1.3.13"
   resolved "https://registry.npmjs.org/medusa-plugin-sendgrid/-/medusa-plugin-sendgrid-1.3.13.tgz"
@@ -9538,6 +9556,13 @@ medusa-test-utils@^1.1.45:
     "@mikro-orm/postgresql" "5.9.7"
     medusa-core-utils "^1.2.3"
     randomatic "^3.1.1"
+
+meilisearch@^0.32.3:
+  version "0.32.5"
+  resolved "https://registry.npmjs.org/meilisearch/-/meilisearch-0.32.5.tgz"
+  integrity sha512-pVccjGAGP1IDSLg3lx9VhyQjUo7kN8x/HVjSurtb8U24V5/pALpf5H2hj6f60QhJd0Ea4tnGRv8fGr2YqWMo9A==
+  dependencies:
+    cross-fetch "^3.1.6"
 
 memfs@^3.1.2, memfs@^3.4.3:
   version "3.6.0"
