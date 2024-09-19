@@ -64,6 +64,29 @@ Join our [Discord server](https://discord.com/invite/medusajs) to meet other com
 
 ## Other channels
 
+```mermaid
+sequenceDiagram
+    %% Participants
+    participant A as Alice
+    participant B as Bob
+    link A: Go to Wiki @ https://en.wikipedia.org/wiki/Alice
+
+    %% Main loop
+    autonumber %% Turn on sequence numbers on arrows
+    loop Every minute
+        opt A is ready
+            A->>+B: OK?
+        end
+        note left of A: Note for Alice
+        note right of B: Note for Bob
+        alt B is ready
+            B-->>A: Yes
+        else B is not ready
+            B-->>-A: No
+        end
+        note over A,B: Note for both
+    end
+```
 - [GitHub Issues](https://github.com/medusajs/medusa/issues)
 - [Twitter](https://twitter.com/medusajs)
 - [LinkedIn](https://www.linkedin.com/company/medusajs)
