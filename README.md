@@ -65,27 +65,21 @@ Join our [Discord server](https://discord.com/invite/medusajs) to meet other com
 ## Other channels
 
 ```mermaid
-sequenceDiagram
-    %% Participants
-    participant A as Alice
-    participant B as Bob
-    link A: Go to Wiki @ https://en.wikipedia.org/wiki/Alice
+classDiagram
+Class01 <|-- AveryLongClass : Cool
+Class03 *-- Class04
+Class05 o-- Class06
+Class07 .. Class08
+Class09 --> C2 : Where am i?
+Class09 --* C3
+Class09 --|> Class07
+Class07 : equals()
+Class07 : Object[] elementData
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
+Class08 <--> C2: Cool label
 
-    %% Main loop
-    autonumber %% Turn on sequence numbers on arrows
-    loop Every minute
-        opt A is ready
-            A->>+B: OK?
-        end
-        note left of A: Note for Alice
-        note right of B: Note for Bob
-        alt B is ready
-            B-->>A: Yes
-        else B is not ready
-            B-->>-A: No
-        end
-        note over A,B: Note for both
-    end
 ```
 - [GitHub Issues](https://github.com/medusajs/medusa/issues)
 - [Twitter](https://twitter.com/medusajs)
