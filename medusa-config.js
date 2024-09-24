@@ -175,5 +175,17 @@ const projectConfig = {
 module.exports = {
   projectConfig,
   plugins,
+  payment_providers: [
+    {
+      id: "paytr",
+      provider_id: "paytr",
+      provider: "paytr",
+      options: {
+        // Add your PayTR API credentials here
+        apiKey: "DmMrLCr4b9nHa75X",
+        apiSecret: "bBHQ2Dz5ZKc6JWH2",
+      },
+    },
+  ],
   modules,
 };
