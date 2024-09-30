@@ -47,6 +47,23 @@ class MyPaymentService extends AbstractPaymentProcessor {
       };
     }
   }
+  async updatePaymentData(
+    sessionId: string,
+    data: Record<string, unknown>,
+  ): Promise<Record<string, unknown> | PaymentProcessorError> {
+    const paymentSession =
+      await this.paymentProviderService.retrieveSession(sessionId);
+    // assuming client is an initialized client
+    // communicating with a third-party service.
+    const clientPayment = await this.client.update(
+      paymentSession.data.id,
+      data,
+    );
+
+    return {
+      id: clientPayment.id,
+    };
+  }
 
   async retrievePayment(
     paymentSessionData: Record<string, unknown>,
@@ -86,25 +103,25 @@ class MyPaymentService extends AbstractPaymentProcessor {
     };
   }
 
-  // async authorizePayment(payment) {
-  //   // Create a payment token using the PayTR client
-  //   const paymentToken = await paytrClient.createToken({
-  //     amount: payment.amount,
-  //     currency: payment.currency,
-  //     paymentType: "credit_card",
-  //     // other payment details...
-  //   });
+  async authorizePayment(payment) {
+    // Create a payment token using the PayTR client
+    const paymentToken = await paytrClient.createToken({
+      amount: payment.amount,
+      currency: payment.currency,
+      paymentType: "credit_card",
+      // other payment details...
+    });
 
-  //   // Create a payment authorization using the PayTR client
-  //   const authorization = await paytrClient.authorizePayment({
-  //     paymentToken: paymentToken.token,
-  //     paymentId: payment.id,
-  //     amount: payment.amount,
-  //   });
+    // Create a payment authorization using the PayTR client
+    const authorization = await paytrClient.authorizePayment({
+      paymentToken: paymentToken.token,
+      paymentId: payment.id,
+      amount: payment.amount,
+    });
 
-  //   // Update the payment status in Medusa
-  //   await this.updatePaymentStatus(payment.id, "authorized");
-  // }
+    // Update the payment status in Medusa
+    await this.updatePaymentStatus(payment.id, "authorized");
+  }
 
   async getPaymentStatus(
     paymentSessionData: Record<string, unknown>,
