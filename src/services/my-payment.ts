@@ -1,5 +1,12 @@
-import { AbstractPaymentProcessor } from "@medusajs/medusa";
+import {
+  AbstractPaymentProcessor,
+  PaymentProcessorContext,
+  PaymentProcessorSessionResponse,
+  PaymentSessionStatus,
+} from "@medusajs/medusa";
 import { PayTRClient } from "paytr-react";
+import axios from "axios";
+import { PaymentRepository } from "@medusajs/medusa/dist/repositories/payment";
 
 interface PaymentProcessorError {
   error: string;
@@ -9,14 +16,50 @@ interface PaymentProcessorError {
 class MyPaymentService extends AbstractPaymentProcessor {
   paytrClient: typeof PayTRClient;
   static identifier = "my-payment"; // add this line
+  private readonly paymentRepository: typeof PaymentRepository;
+
+  merchantId: string;
+  apiKey: string;
+  paytrApiUrl: string;
+  paymentProviderService: any;
+  client: any;
+  manager: any;
 
   constructor(options, container) {
     super(container);
+    this.paymentRepository = this.paymentRepository;
+
     this.paytrClient = new PayTRClient({
       apiKey: "DmMrLCr4b9nHa75X",
       apiSecret: "bBHQ2Dz5ZKc6JWH2",
       merchantId: "494688",
     });
+  }
+
+  async authorizePayment(
+    paymentSessionData: Record<string, unknown>,
+    context: Record<string, unknown>,
+  ): Promise<
+    | PaymentProcessorError
+    | {
+        status: PaymentSessionStatus;
+        data: Record<string, unknown>;
+      }
+  > {
+    try {
+      await this.client.authorize(paymentSessionData.id);
+
+      return {
+        status: PaymentSessionStatus.AUTHORIZED,
+        data: {
+          id: paymentSessionData.id,
+        },
+      };
+    } catch (e) {
+      return {
+        error: e.message,
+      };
+    }
   }
 
   async refundPayment(
@@ -103,25 +146,26 @@ class MyPaymentService extends AbstractPaymentProcessor {
     };
   }
 
-  async authorizePayment(payment) {
-    // Create a payment token using the PayTR client
-    const paymentToken = await paytrClient.createToken({
-      amount: payment.amount,
-      currency: payment.currency,
-      paymentType: "credit_card",
-      // other payment details...
-    });
+  // async authorizePayment(paymentId, amount) {
+  //   try {
+  //     // Call PayTR client's authorizePayment method
+  //     const authorization = await this.paytrClient.authorizePayment({
+  //       paymentId: paymentId,
+  //       amount: amount,
+  //     });
 
-    // Create a payment authorization using the PayTR client
-    const authorization = await paytrClient.authorizePayment({
-      paymentToken: paymentToken.token,
-      paymentId: payment.id,
-      amount: payment.amount,
-    });
+  //     await this.paymentRepository.update(paymentId, {
+  //       status: "authorized",
+  //     });
 
-    // Update the payment status in Medusa
-    await this.updatePaymentStatus(payment.id, "authorized");
-  }
+  //     // Call Medusa's authorizePayment method
+  //     return this.paymentRepository.authorizePayment(paymentId, amount);
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error(error);
+  //     throw error;
+  //   }
+  // }
 
   async getPaymentStatus(
     paymentSessionData: Record<string, unknown>,
@@ -133,19 +177,19 @@ class MyPaymentService extends AbstractPaymentProcessor {
     return (await this.client.getStatus(paymentId)) as PaymentSessionStatus;
   }
 
-  async initiatePayment(
-    context: PaymentProcessorContext,
-  ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse> {
-    // assuming client is an initialized client
-    // communicating with a third-party service.
-    const clientPayment = await this.client.initiate(context);
+  // async initiatePayment(
+  //   context: PaymentProcessorContext,
+  // ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse> {
+  //   // assuming client is an initialized client
+  //   // communicating with a third-party service.
+  //   const clientPayment = await this.client.initiate(context);
 
-    return {
-      session_data: {
-        id: clientPayment.id,
-      },
-    };
-  }
+  //   return {
+  //     session_data: {
+  //       id: clientPayment.id,
+  //     },
+  //   };
+  // }
 
   async deletePayment(
     paymentSessionData: Record<string, unknown>,

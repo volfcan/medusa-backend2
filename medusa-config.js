@@ -186,6 +186,14 @@ module.exports = {
         apiSecret: "bBHQ2Dz5ZKc6JWH2",
       },
     },
+    {
+      id: "my-payment",
+      provider_id: "my-payment",
+      provider: "./services/my-payment",
+      options: {
+        // Add your custom payment provider options here
+      },
+    },
   ],
   modules,
 };
