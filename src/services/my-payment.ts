@@ -29,7 +29,7 @@ class MyPaymentService extends AbstractPaymentProcessor {
     super(container);
     this.paymentRepository = this.paymentRepository;
 
-    this.paytrClient = new PayTRClient({
+    this.client = new PayTRClient({
       apiKey: "DmMrLCr4b9nHa75X",
       apiSecret: "bBHQ2Dz5ZKc6JWH2",
       merchantId: "494688",
@@ -121,15 +121,31 @@ class MyPaymentService extends AbstractPaymentProcessor {
   async initiatePayment(
     context: PaymentProcessorContext,
   ): Promise<PaymentProcessorError | PaymentProcessorSessionResponse> {
-    // assuming client is an initialized client
-    // communicating with a third-party service.
-    const clientPayment = await this.client.initiate(context);
+    try {
+      // Prepare the payment data based on the context
+      const paymentData = {
+        amount: context.amount,
+        currency: context.currency,
+        // Include other necessary fields like order ID, user details, etc.
+      };
 
-    return {
-      session_data: {
-        id: clientPayment.id,
-      },
-    };
+      // Call the PayTR API to initiate the payment
+      const clientPayment = await this.client.initiate(paymentData);
+
+      // Return the session data with the payment ID
+      return {
+        session_data: {
+          id: clientPayment.id,
+        },
+      };
+    } catch (error) {
+      // Handle errors appropriately
+      return {
+        message: "Payment initiation failed",
+        code: error.code || "UNKNOWN_ERROR",
+        error: error.message || "An unknown error occurred",
+      } as PaymentProcessorError;
+    }
   }
 
   async updatePayment(
