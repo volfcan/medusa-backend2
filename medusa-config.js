@@ -195,5 +195,21 @@ module.exports = {
       },
     },
   ],
-  modules,
+  modules: {
+    // ...
+    [modules.PAYMENT]: {
+      resolve: "@medusajs/payment",
+      options: {
+        providers: [
+          {
+            resolve: "./services/my-payment",
+            id: "paytr",
+            options: {
+              // provider options...
+            },
+          },
+        ],
+      },
+    },
+  },
 };
