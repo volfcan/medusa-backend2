@@ -12,4 +12,8 @@ RUN yarn
 
 RUN yarn build
 
+what this command does?:
+
+RUN yarn install --production --ignore-engines
+
 CMD medusa migrations run && yarn start
